@@ -1,0 +1,3 @@
+{"method":{"declaringClass":"java.util.HashMap","name":"put","parameterTypes":["java.lang.Object","java.lang.Object"],"returnType":"java.lang.Object","modifiers":1,"slot":5,"exceptionTypes":[]}}
+{"method":{"declaringClass":"java.util.HashMap","name":"size","parameterTypes":[],"returnType":"int","modifiers":1,"slot":13,"exceptionTypes":[]},"success":1}
+{"method":{"declaringClass":"java.util.HashMap","name":"get","parameterTypes":["java.lang.Object"],"returnType":"java.lang.Object","modifiers":1,"slot":4,"exceptionTypes":[]},"success":3}
