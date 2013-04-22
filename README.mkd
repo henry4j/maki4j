@@ -49,7 +49,7 @@ public class AppConfig {
 </beans>
 ```
 
-###### example unit tests that leverage bimock
+###### example unit tests that uses bimock and playback files
 
 * [BimockTest](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/java/com/henry4j/commons/BimockTest.java) -- this is a self test with its resources, [test-record-and-replay-list.json](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/resources/test-record-and-replay-list.json), and [test-record-and-replay-map.json](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/resources/test-record-and-replay-map.json)
 
