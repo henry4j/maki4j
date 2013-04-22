@@ -1,4 +1,4 @@
-### maki4j has **bimock** tool that helps us record & replay dependent objects for unit tests.
+### maki4j has a home for **bimock** tool that helps us record & replay dependent objects for unit tests.
 
 #### Introduction
 
