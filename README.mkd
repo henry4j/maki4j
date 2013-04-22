@@ -1,8 +1,8 @@
-### maki4j has a home for **bimock** tool that helps us record & replay public objects and their methods for unit tests.
+#### maki4j has a home for **bimock** tool that helps us record & replay public objects and their methods for unit tests.
 
 * Downloads: [maki4j-0.1.jar](https://raw.github.com/henry4j/maki4j/master/target/maki4j/maki4j-0.1.jar), [maki4j-0.1-sources.jar](https://raw.github.com/henry4j/maki4j/master/target/maki4j/maki4j-0.1-sources.jar)
 
-#### Introduction
+##### Introduction
 
 * How about hardcoding stubbing one, or consecutive calls?
   * the general idea is once stubbed, the method will always return stubbed value regardless of how many times it is called. Last stubbing is more important - when you stubbed the same method with the same arguments many times. Sometimes we need to stub with different return value/exception for the same method call. Typical use case could be mocking iterators. Original version of Mockito did not have this feature to promote simple mocking. For example, instead of iterators one could use Iterable or simply collections. Those offer natural ways of stubbing (e.g. using real collections). In rare scenarios stubbing consecutive calls could be useful, though -- yes, it certainly works, but we often gave this up.
@@ -12,7 +12,7 @@
   * when in Replay mode, it sets up method invocations and answers out of the resource file when it starts up, and replays answers of returns or throws.
   * also, it throws up a runtime exception to indicate a potential bug, as soon as unexpected, or additional method invocations happen on the bimock.
 
-#### Getting Started
+##### Getting Started
 
 * Declare Spring Beans in AppConfig.java, or application-config.xml
 
@@ -38,7 +38,7 @@ public class AppConfig {
 }
 ```
 
-##### example `<bean />` definitions in application-config.xml
+###### example `<bean />` definitions in application-config.xml
 
 ```java
 <beans>
@@ -49,7 +49,7 @@ public class AppConfig {
 </beans>
 ```
 
-##### example unit tests that leverage bimock
+###### example unit tests that leverage bimock
 
 * [BimockTest](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/java/com/henry4j/commons/BimockTest.java) -- this is a self test with its resources, [test-record-and-replay-list.json](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/resources/test-record-and-replay-list.json), and [test-record-and-replay-map.json](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/resources/test-record-and-replay-map.json)
 
@@ -83,19 +83,19 @@ public class BimockTest {
 }
 ```
 
-#### Bimock Implementation in 3 classes
+##### Bimock Implementation in 3 classes
 
 * [Bimock](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/main/java/com/henry4j/commons/stubbing/Bimock.java) -- this is the main module that depends on PojoMapper and BimockModule.
 * [BimockModule](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/main/java/com/henry4j/commons/stubbing/BimockModule.java) -- this Jackson module contains mix-ins that control serialization and deserialization.
 * [PojoMapper](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/main/java/com/henry4j/commons/base/PojoMapper.java) -- this is the mapper that serializes POJO to JSON and deserializes POJO from JSON.
 
-#### When in Trouble with Bimock
+##### When in Trouble with Bimock
 
 * Resources when to customize serialization & deserialization, or contact me:
   * http://wiki.fasterxml.com/JacksonMixInAnnotations
   * http://wiki.fasterxml.com/JacksonPolymorphicDeserialization
 
-#### Resources
+##### Resources
 
 * [Goodbye! to expect-run-verify](http://monkeyisland.pl/2008/02/01/deathwish/)
 * [Mockito Tutorial](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html)
