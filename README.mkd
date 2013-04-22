@@ -1,7 +1,5 @@
 ### maki4j has **bimock** tool that helps us record & replay dependent objects for unit tests.
 
-Resources: [Goodbye! to expect-run-verify](http://monkeyisland.pl/2008/02/01/deathwish/), [Mockito Tutorial](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html)
-
 #### Introduction
 
 * How about hardcoding stubbing one, or consecutive calls?
@@ -94,3 +92,8 @@ public class BimockTest {
 * Resources when to customize serialization & deserialization, or contact me:
   * http://wiki.fasterxml.com/JacksonMixInAnnotations
   * http://wiki.fasterxml.com/JacksonPolymorphicDeserialization
+
+#### Resources
+
+* [Goodbye! to expect-run-verify](http://monkeyisland.pl/2008/02/01/deathwish/)
+* [Mockito Tutorial](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html)
