@@ -54,6 +54,7 @@ public class AppConfig {
 * [Bimock](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/main/java/com/henry4j/commons/stubbing/Bimock.java) -- this is the main module that depends on PojoMapper and BimockModule.
 * [BimockModule](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/main/java/com/henry4j/commons/stubbing/BimockModule.java) -- this Jackson module contains mix-ins that control serialization and deserialization.
 * [PojoMapper](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/main/java/com/henry4j/commons/base/PojoMapper.java) -- this is the mapper that serializes POJO to JSON and deserializes POJO from JSON.
+* [BimockTest](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/java/com/henry4j/commons/BimockTest.java)
 
 #### When in Trouble with Bimock
 
