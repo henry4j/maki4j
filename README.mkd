@@ -1,5 +1,7 @@
 ### maki4j has a home for **bimock** tool that helps us record & replay dependent objects for unit tests.
 
+* Downloads: [maki4j-0.1.jar](https://raw.github.com/henry4j/maki4j/master/target/maki4j/maki4j-0.1.jar), [maki4j-0.1-sources.jar](https://raw.github.com/henry4j/maki4j/master/target/maki4j/maki4j-0.1-sources.jar)
+
 #### Introduction
 
 * How about hardcoding stubbing one, or consecutive calls?
