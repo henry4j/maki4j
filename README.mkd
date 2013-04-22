@@ -16,7 +16,7 @@
 
 * Declare Spring Beans in AppConfig.java, or application-config.xml
 
-##### example @Bean definitions in AppConfig.java
+###### example @Bean definitions in AppConfig.java
 
 ```java
 @Configuration
