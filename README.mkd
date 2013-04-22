@@ -16,7 +16,8 @@ Resources: [Goodbye! to expect-run-verify](http://monkeyisland.pl/2008/02/01/dea
 #### Getting Started
 
 * Declare Spring Beans in AppConfig.java, or application-config.xml
-  * example @Bean definitions in AppConfig.java
+
+##### example @Bean definitions in AppConfig.java
 
 ```java
 @Configuration
@@ -38,7 +39,7 @@ public class AppConfig {
 }
 ```
 
-  * `<bean />` definitions in application-config.xml
+##### `<bean />` definitions in application-config.xml
 
 ```java
 <beans>
