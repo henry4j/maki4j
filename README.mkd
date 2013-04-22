@@ -54,7 +54,7 @@ public class AppConfig {
 * [Bimock](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/main/java/com/henry4j/commons/stubbing/Bimock.java) -- this is the main module that depends on PojoMapper and BimockModule.
 * [BimockModule](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/main/java/com/henry4j/commons/stubbing/BimockModule.java) -- this Jackson module contains mix-ins that control serialization and deserialization.
 * [PojoMapper](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/main/java/com/henry4j/commons/base/PojoMapper.java) -- this is the mapper that serializes POJO to JSON and deserializes POJO from JSON.
-* [BimockTest](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/java/com/henry4j/commons/BimockTest.java) -- this is a unit test or a self test with its resources, [test-record-and-replay-list.json](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/resources/test-record-and-replay-list.json), and [test-record-and-replay-map.json](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/resources/test-record-and-replay-map.json)
+* [BimockTest](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/java/com/henry4j/commons/BimockTest.java) -- this is a self test with its resources, [test-record-and-replay-list.json](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/resources/test-record-and-replay-list.json), and [test-record-and-replay-map.json](https://github.com/henry4j/maki4j/blob/master/sources/maki4j/src/test/resources/test-record-and-replay-map.json)
 
 #### When in Trouble with Bimock
 
