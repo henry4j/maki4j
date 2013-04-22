@@ -95,7 +95,7 @@ public class BimockTest {
   * http://wiki.fasterxml.com/JacksonMixInAnnotations
   * http://wiki.fasterxml.com/JacksonPolymorphicDeserialization
 
-##### Resources
+##### Additional Resources
 
 * [Goodbye! to expect-run-verify](http://monkeyisland.pl/2008/02/01/deathwish/)
 * [Mockito Tutorial](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html)
