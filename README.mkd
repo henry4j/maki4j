@@ -39,7 +39,7 @@ public class AppConfig {
 }
 ```
 
-##### `<bean />` definitions in application-config.xml
+##### example `<bean />` definitions in application-config.xml
 
 ```java
 <beans>
