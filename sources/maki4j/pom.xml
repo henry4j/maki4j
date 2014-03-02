@@ -18,7 +18,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>0.11.6</version>
+      <version>1.12.4</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -90,7 +90,7 @@
       <plugin>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok-maven-plugin</artifactId>
-        <version>0.11.6.0</version>
+        <version>1.12.4.0</version>
         <executions>
           <execution>
             <phase>generate-sources</phase>
@@ -115,7 +115,7 @@
           <plugin>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok-maven-plugin</artifactId>
-            <version>0.11.6.0</version>
+            <version>1.12.4.0</version>
             <dependencies>
               <dependency>
                 <groupId>sun.jdk</groupId>
@@ -130,5 +130,41 @@
       </build>
     </profile>
   </profiles>
+
+  <!--
+  <repositories>
+    <repository>
+      <id>sonatype</id>
+      <name>sonatype</name>
+      <url>https://oss.sonatype.org/content/groups/public/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+    <repository>
+      <id>central</id>
+      <name>Maven Repository Switchboard</name>
+      <layout>default</layout>
+      <url>http://repo1.maven.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>facebook</id>
+      <name>facebook</name>
+      <url>http://mirror.facebook.net/maven/repository/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  </repositories>
+  -->
 
 </project>
