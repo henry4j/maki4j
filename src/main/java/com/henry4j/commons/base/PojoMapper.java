@@ -19,14 +19,17 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class PojoMapper {
     private JsonFactory jsonFactory = new JsonFactory();
@@ -76,6 +79,11 @@ public class PojoMapper {
         return objectMapper.readValue(input, pojoClass);
     }
 
+    @SneakyThrows({ JsonProcessingException.class })
+    public <T> byte[] toBytes(T pojo) {
+        return objectMapper.writeValueAsBytes(pojo);
+    }
+
     public <T> String toJson(T pojo) {
         return toJson(pojo, false);
     }
@@ -83,7 +91,7 @@ public class PojoMapper {
     @SneakyThrows({ JsonGenerationException.class, IOException.class })
     public <T> String toJson(T pojo, boolean prettyPrint) {
         StringWriter writer = new StringWriter();
-        @Cleanup JsonGenerator jg = jsonFactory.createJsonGenerator(writer);
+        @Cleanup JsonGenerator jg = jsonFactory.createGenerator(writer);
         if (prettyPrint) {
             jg.useDefaultPrettyPrinter();
         }
@@ -93,7 +101,7 @@ public class PojoMapper {
 
     @SneakyThrows({ JsonGenerationException.class, IOException.class })
     public <T> OutputStream toJson(T pojo, OutputStream output, boolean prettyPrint) {
-        @Cleanup JsonGenerator jg = jsonFactory.createJsonGenerator(output);
+        @Cleanup JsonGenerator jg = jsonFactory.createGenerator(output);
         if (prettyPrint) {
             jg.useDefaultPrettyPrinter();
         }
@@ -103,11 +111,19 @@ public class PojoMapper {
 
     @SneakyThrows({ JsonGenerationException.class, IOException.class })
     public <T> Writer toJson(T pojo, Writer output, boolean prettyPrint) {
-        @Cleanup JsonGenerator jg = jsonFactory.createJsonGenerator(output);
+        @Cleanup JsonGenerator jg = jsonFactory.createGenerator(output);
         if (prettyPrint) {
             jg.useDefaultPrettyPrinter();
         }
         objectMapper.writeValue(jg, pojo);
         return output;
+    }
+
+    public ObjectNode object() {
+        return objectMapper.createObjectNode();
+    }
+
+    public ArrayNode array() {
+        return objectMapper.createArrayNode();
     }
 }
