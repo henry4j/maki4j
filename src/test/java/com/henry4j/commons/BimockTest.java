@@ -53,6 +53,7 @@ public class BimockTest {
         val bb1 = ByteBuffer.wrap(new byte[] {1, 2, 3, 4});
         assertThat(bb1.get(), equalTo((byte)1));
         val json = pojoMapper.toJson(bb1);
+        System.out.print("debug: " + json);
         val bb2 = pojoMapper.fromJson(json, ByteBuffer.class);
         assertThat(bb2.get(), equalTo((byte)2));
     }
