@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.Module;
@@ -29,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
 public class PojoMapper {
     private JsonFactory jsonFactory = new JsonFactory();
     private ObjectMapper objectMapper = new ObjectMapper()
+            .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
             .configure(MapperFeature.AUTO_DETECT_IS_GETTERS, false)
@@ -56,6 +59,11 @@ public class PojoMapper {
     @SneakyThrows({ JsonParseException.class, IOException.class })
     public <T> T fromJson(String input, TypeReference<T> typeRef) {
         return objectMapper.readValue(input, typeRef);
+    }
+
+    @SneakyThrows({ JsonParseException.class, IOException.class })
+    public <T> T fromJson(String input, JavaType type) {
+        return objectMapper.readValue(input, type);
     }
 
     @SneakyThrows({ JsonParseException.class, IOException.class })
