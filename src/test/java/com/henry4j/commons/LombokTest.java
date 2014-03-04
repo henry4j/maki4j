@@ -26,10 +26,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.Synchronized;
+import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
+import lombok.experimental.Wither;
 import lombok.extern.log4j.Log4j;
 
+import org.apache.http.HttpHost;
+import org.apache.http.HttpVersion;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Maps;
@@ -179,106 +184,7 @@ public class LombokTest {
         }
     }
 
-//    @Test
-//    public void testExtensionsAndFunctions() {
-//        val list = Arrays.asList("bananas", "sananab", "abab", "baba");
-//
-//        val max = Ordering.from(new Comparator<String>() {
-//            public int compare(String s1, String s2) {
-//                return s1.length() - s2.length();
-//            }
-//        }).max(list);
-//        val maxima = Extensions.maxima(list, new Function1<String, Integer>() {
-//            public Integer apply(String s) {
-//                return s.length();
-//            }
-//        });
-//
-//        Function2<String, String, Integer> compare = compare();
-//        Comparator<String> comparator = Extensions.comparator(compare);
-//        assertThat(comparator.compare("abc", "xyz"), equalTo(-1));
-//
-//        val min = compare().comparator().ordering().min(list);
-//        val minima = list.minima(length());
-//
-//        assertThat(max, equalTo("bananas"));
-//        assertThat(maxima, equalTo(Arrays.asList("bananas", "sananab")));
-//        assertThat(min, equalTo("abab"));
-//        assertThat(minima, equalTo(Arrays.asList("abab", "baba")));
-//    }
-
-//    @Log4j
-//    @ExtensionMethod({ Extensions.class })
-//    public static class AsScheduled {
-//        @Autowired
-//        private AsAsync asAsync;
-//        @Autowired
-//        private AsAdvised asAdvised;
-//        @Setter
-//        private Map<SqsQueue, Integer> maxSqsRetrievalsPerSecByQueue;
-//
-//        @Scheduled(fixedRate = 1000)
-//        public void consumeAll() {
-//            val queues = maxSqsRetrievalsPerSecByQueue.keySet();
-//            copyOf(queues.map(consumeAsync())).each(joinQuietly());
-//        }
-//
-//        @Function
-//        private Future<Boolean> consumeAsync(SqsQueue queue) {
-//            boolean exit;
-//            if (exit = asAdvised.tryConsumeMessages(queue)) {
-//                val n = maxSqsRetrievalsPerSecByQueue.get(queue) - 1;
-//                val sleep = 900 / n; // 'sleep' helps uniformly distribute asynchronous task submissions.
-//                copyOf(Pair.of(queue, sleep).times(n).map(consumeAsyncAsleep())).each(joinQuietly());
-//            }
-//            return new AsyncResult(exit);
-//        }
-//
-//        @Action
-//        private void joinQuietly(Future<Boolean> f) {
-//            try {
-//                f.get();
-//            } catch (Exception e) {
-//                log.error(String.format("Exception uncaught!!!"), e);
-//            }
-//        }
-//
-//        @Function
-//        private Future<Boolean> consumeAsyncAsleep(final Pair<SqsQueue, Integer> queueSleep) {
-//            try {
-//                val future = asAsync.consumeMessagesAsync(queueSleep.first());
-//                Thread.sleep(queueSleep.second());
-//                return future;
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException("UNCHECKED: this bug should go unhandled.", e);
-//            }
-//        }
-//    }
-//
-//    public static class AsAsync {
-//        @Autowired
-//        private AsAdvised asAdvised;
-//
-//        @Async
-//        public Future<Boolean> consumeMessagesAsync(SqsQueue queue) {
-//            return new AsyncResult<Boolean>(asAdvised.tryConsumeMessages(queue));
-//        }
-//    }
-
-    public static class AsAdvised {
-        public Boolean tryConsumeMessages(SqsQueue queue) {
-            return true; // TODO: some IO and computation.
-        }
-    }
-
-    public static enum SqsQueue {
-        CAM_BalanceChange,
-        IW_ActionRecord,
-        CROW_ReversalNotification,
-        OWEN_ShipmentCompletion, OWEN_CompletedShipmentUpdate;
-    }
-
-    // We get synchronized on fields $lock = Object[0] and $Locks = new Object[0] for instance & static methods.
+    // Get synchronized on fields $lock = new Object[0] and $Locks = new Object[0] for instance & static methods.
     public static class SynchronizedRight {
         private final Object readLock = new Object[0];
 
@@ -301,25 +207,38 @@ public class LombokTest {
     @Log4j
     public static class SneakyThrowsOutOfReasoning implements Runnable {
         @SneakyThrows(UnsupportedEncodingException.class) // b/c there is no reason throw & catch impossible exceptions
-        public String utf8ToString(byte[] bytes) {
+        public String cannotThrowUpAsUTF8IsAlwaysAvailable(byte[] bytes) {
             return new String(bytes, "UTF-8");
         }
 
-        // b/c throwing a runtime exception from a needlessly strict interface only obscures the real cause of the issue.
+        // b/c throwing an unchecked exception from a needlessly strict interface only obscures the real cause of the issue.
         // @SneakyThrows({ IOException.class })
-        public void run() {
-//            try {
-//                // Apache Fluent Http Client http://hc.apache.org/httpcomponents-client-ga/fluent-hc/index.html
-//                String result1 = Request.Get("http://somehost/")
-//                        .version(HttpVersion.HTTP_1_1)
-//                        .connectTimeout(1000)
-//                        .socketTimeout(1000)
-//                        .viaProxy(new HttpHost("myproxy", 8080))
-//                        .execute().returnContent().asString();
-//                log.debug(result1);
-//            } catch (IOException e) {
-//                throw new RuntimeException("UNCHECKED: this bug should go unhandled.", e);
-//            }
+        public void run() { // this rigid interface only allows unchecked exceptions to be thrown.
+            try {
+                // Apache Fluent Http Client http://hc.apache.org/httpcomponents-client-ga/fluent-hc/index.html
+                String result1 = org.apache.http.client.fluent.Request.Get("http://somehost/")
+                        .version(HttpVersion.HTTP_1_1)
+                        .connectTimeout(1000)
+                        .socketTimeout(1000)
+                        .viaProxy(new HttpHost("myproxy", 8080))
+                        .execute().returnContent().asString();
+                log.debug(result1);
+            } catch (IOException e) {
+                throw new RuntimeException("UNCHECKED: this bug should go unhandled.", e);
+            }
         }
+    }
+
+    @Value // immutable as all fields are made private and final by default.
+    public static class DTO {
+        String key;
+        @Wither(AccessLevel.PACKAGE) int value;
+    }
+
+    @Test
+    public void testDTO() {
+        val dto1 = new DTO("key", 1);
+        val dto2 = dto1.withValue(2);
+        Assert.assertNotSame(dto1, dto2);
     }
 }
