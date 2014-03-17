@@ -12,12 +12,12 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Suite;
 
-import com.henry4j.commons.JunitTest.FibonacciTest;
-import com.henry4j.commons.JunitTest.PowerTest;
+import com.henry4j.commons.MathTestSuite.FibonacciTest;
+import com.henry4j.commons.MathTestSuite.PowerTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ FibonacciTest.class, PowerTest.class })
-public class JunitTest {
+public class MathTestSuite {
     @RunWith(Parameterized.class)
     public static class FibonacciTest {
         @Parameters(name = "{index}: fib({0})={1}")
