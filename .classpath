@@ -20,9 +20,14 @@
       <attribute value="jar:file:/Users/hylee/.m2/repository/com/google/guava/guava/16.0.1/guava-16.0.1-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="var" path="M2_REPO/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5.jar" sourcepath="M2_REPO/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5-sources.jar">
+  <classpathentry kind="var" path="M2_REPO/org/mockito/mockito-core/1.9.5/mockito-core-1.9.5.jar" sourcepath="M2_REPO/org/mockito/mockito-core/1.9.5/mockito-core-1.9.5-sources.jar">
     <attributes>
-      <attribute value="jar:file:/Users/hylee/.m2/repository/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5-javadoc.jar!/" name="javadoc_location"/>
+      <attribute value="jar:file:/Users/hylee/.m2/repository/org/mockito/mockito-core/1.9.5/mockito-core-1.9.5-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/objenesis/objenesis/1.0/objenesis-1.0.jar" sourcepath="M2_REPO/org/objenesis/objenesis/1.0/objenesis-1.0-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/Users/hylee/.m2/repository/org/objenesis/objenesis/1.0/objenesis-1.0-javadoc.jar!/" name="javadoc_location"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="var" path="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.3.2/jackson-core-2.3.2.jar" sourcepath="M2_REPO/com/fasterxml/jackson/core/jackson-core/2.3.2/jackson-core-2.3.2-sources.jar">
