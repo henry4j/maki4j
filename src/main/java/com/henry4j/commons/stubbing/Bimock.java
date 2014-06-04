@@ -27,10 +27,9 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 
-import pp.commons.test.base.PojoMapper;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
+import com.henry4j.commons.base.PojoMapper;
 
 /*
  * Bimock introduction --- excerpted from http://w.amazon.com?-/bimock
