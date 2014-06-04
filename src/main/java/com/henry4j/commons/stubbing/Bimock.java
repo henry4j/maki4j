@@ -11,15 +11,13 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
@@ -29,18 +27,24 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import pp.commons.test.base.PojoMapper;
+
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
-import com.henry4j.commons.base.PojoMapper;
 
+/*
+ * Bimock introduction --- excerpted from http://w.amazon.com?-/bimock
+ * How about automating stubbing arbitrary calls on public methods?
+ * Let's use a bimock (bidirectional mock) which has a factory method `of` 
+ *   that takes a real object, a mode of record, or replay, and a resource file.
+ * When in Record mode, it records method invocations with return values or exceptions
+ *   into the resource file in the JSON format.
+ * When in Replay mode, it sets up method invocations and answers out of the resource file
+ *   when it starts up, and replays answers of returns or throws.
+ *   also, it throws up a runtime exception to indicate a potential bug, 
+ *   as soon as unexpected, or additional method invocations happen on the bimock.
+ */
 public class Bimock {
-    private static final String LINE_BREAK = System.getProperty("line.separator");
     private final PojoMapper pojoMapper;
 
     // Bimock.BimockModule is required to be auto-wired to PojoMapper's constructor.
@@ -50,10 +54,14 @@ public class Bimock {
 
     public <T> T of(T object, Mode mode, final File resource) {
         if (Mode.Record == mode && resource.exists()) {
-            resource.delete();
+            if (!resource.delete()) {
+                throw new IllegalStateException("UNCHECKED: this bug should go unhandled.");
+            }
         }
+        val depth = new int[1];
         val recordDown = new Answer<Object>() {
             public Object answer(InvocationOnMock iom) throws Throwable {
+                depth[0]++;
                 Object success = null;
                 Throwable failure = null;
                 try {
@@ -61,19 +69,20 @@ public class Bimock {
                 } catch (Throwable t) {
                     throw (failure = t);
                 } finally {
-                    if (Modifier.isPublic(iom.getMethod().getModifiers())) {
-                        Files.append(toJson(iom.getMethod(), success, failure) + LINE_BREAK, resource, Charsets.UTF_8);
+                    if (0 == --depth[0]) { // only records out-most invocation.
+                        Files.append(toJson(iom.getMethod(), success, failure) + "\n", resource, Charsets.UTF_8);
                     }
                 }
             }
         };
         val throwUp = new Answer<Object>() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                throw new RuntimeException("UNCHECKED: this bug should go unhandled, as there are unexpected invocation(s).");
+            public Object answer(InvocationOnMock invocation) {
+                throw new IllegalStateException("UNCHECKED: this bug should go unhandled, as there are unexpected invocation(s).");
             }
         };
         @SuppressWarnings("unchecked")
-        T mock = mock((Class<T>)object.getClass(), withSettings()
+        val clazz = (Class<T>)object.getClass();
+        T mock = mock(clazz, withSettings()
                 .spiedInstance(Mode.Record == mode ? object : null)
                 .defaultAnswer(Mode.Record == mode ? recordDown : throwUp));
         return Mode.Replay == mode ? doStub(mock, resource) : mock;
@@ -81,27 +90,27 @@ public class Bimock {
 
     @SneakyThrows({ IOException.class })
     private <T> T doStub(T mock, File resource) {
-        val invocationsByHashCode = new LinkedHashMap<Integer, Queue<Invocation>>();
+        val invocationsByMethodSignature = new LinkedHashMap<Integer, Queue<Invocation>>();
         for (val json : Files.readLines(resource, Charsets.UTF_8)) {
-            val i = pojoMapper.fromJson(json, Invocation.class);
-            int c = i.hashCode();
-            if (!invocationsByHashCode.containsKey(c)) {
-                invocationsByHashCode.put(c, new LinkedList<Invocation>());
+            Invocation i = pojoMapper.fromJson(json, Invocation.class);
+            int c = methodSignatureCode(i);
+            if (!invocationsByMethodSignature.containsKey(c)) {
+                invocationsByMethodSignature.put(c, new LinkedList<Invocation>());
             }
-            invocationsByHashCode.get(c).offer(i);
+            invocationsByMethodSignature.get(c).add(i);
         }
-        for (val invocations : invocationsByHashCode.values()) {
+        for (val invocations : invocationsByMethodSignature.values()) {
             Stubber s = null;
             for (val i: invocations) {
                 if (null != i.failure()) {
-                    s = null == s ? doThrow(i.failure()) : s.doThrow(i.failure());
+                    s = (null == s ? doThrow(i.failure()) : s.doThrow(i.failure()));
                 } else if (Void.TYPE.equals(i.method().getReturnType())) {
-                    s = null == s ? doNothing() : s.doNothing();
+                    s = (null == s ? doNothing() : s.doNothing());
                 } else {
-                    s = null == s ? doReturn(i.success()) : s.doReturn(i.success());
+                    s = (null == s ? doReturn(i.success()) : s.doReturn(i.success()));
                 }
             }
-            s = s.doThrow(new RuntimeException("UNCHECKED: this bug should go unhandled, as there are unexpected invocation(s)."));
+            s = s.doThrow(new IllegalStateException("UNCHECKED: this bug should go unhandled, as there are unexpected invocation(s)."));
             doStub(invocations.peek().method(), s.when(mock));
         }
         return mock;
@@ -118,6 +127,11 @@ public class Bimock {
         m.invoke(o, args);
     }
 
+    private static int methodSignatureCode(Invocation i) {
+        // method.hashCode() hashes the declaring class' fully qualified name and the method name.
+        return i.method.hashCode() ^ Arrays.hashCode(i.method.getParameterTypes());
+    }
+
     private String toJson(Method method, Object success, Throwable failure) {
         return pojoMapper.toJson(Invocation.of(method, success, failure));
     }
@@ -126,17 +140,11 @@ public class Bimock {
         Record, Replay
     }
 
-    @Data
-    @Accessors(fluent = true)
+    @Getter @Accessors(fluent = true)
     @NoArgsConstructor @AllArgsConstructor(staticName = "of")
     public static class Invocation {
         private Method method;
         private Object success;
         private Throwable failure;
-
-        @Override
-        public int hashCode() {
-            return method.hashCode() ^ Arrays.hashCode(method.getParameterTypes());
-        }
     }
 }

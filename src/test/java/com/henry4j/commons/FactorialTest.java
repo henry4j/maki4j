@@ -1,22 +1,14 @@
 package com.henry4j.commons;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-
-import java.util.Comparator;
-import java.util.PriorityQueue;
-
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import org.junit.Test;
-
 public class FactorialTest {
-    @Test
-    public void testFactorial() {
-        assertThat(BigInt.factorial(8), equalTo(new BigInt(new int[] { 2 * 3 * 4 * 5 * 6 * 7 * 8 }, 1)));
-        assertThat(BigInt.factorial(10), equalTo(new BigInt(new int[] { 2 * 3 * 4 * 5 * 6 * 7 * 8 * 9 * 10 }, 1)));
-    }
+//    @Test
+//    public void testFactorial() {
+//        assertThat(BigInt.factorial(8), equalTo(new BigInt(new int[] { 2 * 3 * 4 * 5 * 6 * 7 * 8 }, 1)));
+//        assertThat(BigInt.factorial(10), equalTo(new BigInt(new int[] { 2 * 3 * 4 * 5 * 6 * 7 * 8 * 9 * 10 }, 1)));
+//    }
 
     @ToString
     @EqualsAndHashCode
@@ -67,21 +59,21 @@ public class FactorialTest {
             return new BigInt(result, signum == val.signum ? 1 : -1);
         }
 
-        public static BigInt factorial(int n) {
-            PriorityQueue<BigInt> acc = new PriorityQueue<FactorialTest.BigInt>(1, new Comparator<BigInt>() {
-                @Override
-                public int compare(BigInt a, BigInt b) {
-                    return a.compareMagnitude(b);
-                }
-            });
-            for (int i = 2; i <= n; i++) {
-                acc.offer(new BigInt(new int[] { i }, 1));
-            }
-            while (acc.size() > 1) {
-                acc.offer(acc.poll().multiply(acc.poll()));
-            }
-            return acc.poll();
-        }
+//        public static BigInt factorial(int n) {
+//            PriorityQueue<BigInt> acc = new PriorityQueue<FactorialTest.BigInt>(1, new Comparator<BigInt>() {
+//                @Override
+//                public int compare(BigInt a, BigInt b) {
+//                    return a.compareMagnitude(b);
+//                }
+//            });
+//            for (int i = 2; i <= n; i++) {
+//                acc.offer(new BigInt(new int[] { i }, 1));
+//            }
+//            while (acc.size() > 1) {
+//                acc.offer(acc.poll().multiply(acc.poll()));
+//            }
+//            return acc.poll();
+//        }
 
         private int[] multiplyToLen(int[] x, int xlen, int[] y, int ylen, int[] z) {
             int xstart = xlen - 1;
